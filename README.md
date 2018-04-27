@@ -119,5 +119,3 @@
         super.onActivityResult(requestCode, resultCode, data);
     }
 ```
-
-Edit By [MaHua](http://mahua.jser.me)
