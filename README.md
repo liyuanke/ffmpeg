@@ -1,8 +1,6 @@
-#ffmpeg
+====采用ffmpeg实现视频的压缩、剪切，并提供视频录制功能
 
-#采用ffmpeg实现视频的压缩、剪切，并提供视频录制功能
-
-#配置权限
+=配置权限
 
 <uses-permission android:name="android.permission.CAMERA" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -10,7 +8,7 @@
 <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
- #初始化
+ =初始化
  public static void initSmallVideo() {
         // 设置拍摄视频缓存路径
         File dcim = Environment
@@ -31,10 +29,7 @@
   }
 
 
- /**
-  * 视频压缩
-  * @param path
-  */
+=视频压缩
  private void compress(String path) {
     FFmpeg fFmpeg = new FFmpeg.Builder()
                               .setInputPath(path)
@@ -72,7 +67,7 @@ FFmpeg fFmpeg = new FFmpeg.Builder()
                     .setMediaConfig(mediaConfig)
                     .build();
 
-#视频录制
+=视频录制
 FFmpeg fFmpeg = new FFmpeg.Builder()
                           .bind(this)
                           .setRequestCode(RECORD_CODE)//录制请求码
@@ -90,9 +85,7 @@ MediaRecorderConfig recorderConfig = new MediaRecorderConfig.Buidler()
                     .build();
 
 
-/**
-* 视频剪切
-*/
+=视频剪切
 private void cut(String path){
         FFmpeg fFmpeg = new FFmpeg.Builder()
                                   .bind(this)
