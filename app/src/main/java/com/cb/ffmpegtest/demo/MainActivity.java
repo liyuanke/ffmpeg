@@ -157,7 +157,12 @@ public class MainActivity extends AppCompatActivity {
      * @param c
      */
     public void recorder(View c) {
-        new FFmpeg.Builder().bind(this).setRequestCode(RECORD_CODE).setMaxRecordTime(60000).build().recordr();
+        FFmpeg fFmpeg = new FFmpeg.Builder()
+                                  .bind(this)
+                                  .setRequestCode(RECORD_CODE)
+                                  .setMaxRecordTime(60000)
+                                  .build();
+        fFmpeg.recordr();
     }
 
     @Override
@@ -231,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 ViewUtils.dismissProgress();
             }
         });
+
 
     }
 
