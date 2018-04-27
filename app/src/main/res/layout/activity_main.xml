@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="本地选择压缩" />
+
         <RadioButton
             android:id="@+id/rb_cut"
             android:layout_width="wrap_content"
@@ -45,48 +46,10 @@
         android:layout_marginTop="15dp"
         android:background="#000000" />
 
-    <LinearLayout
-        android:id="@+id/ll_only_compress"
+    <Button
+        android:id="@+id/bt_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/bt_choose"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:onClick="choose"
-            android:text="选择视频并压缩" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_cut"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/btn_cut"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:onClick="cut"
-            android:text="选择视频并剪切" />
-    </LinearLayout>
-
-    <ScrollView xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/sv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/bt_start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:onClick="recorder"
-            android:text="开始录制" />
-    </ScrollView>
+        android:layout_marginTop="10dp"
+        android:text="开始录制" />
 </LinearLayout>

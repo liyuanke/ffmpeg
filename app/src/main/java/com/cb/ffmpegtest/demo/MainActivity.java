@@ -14,41 +14,35 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cb.ffmpeg.FFmpeg;
 import com.cb.ffmpeg.common.Constants;
 import com.cb.ffmpeg.common.DeviceUtils;
 import com.cb.ffmpeg.common.JianXiCamera;
-import com.cb.ffmpeg.common.StringUtils;
 import com.cb.ffmpeg.common.UriUtils;
 import com.cb.ffmpeg.common.ViewUtils;
 import com.cb.ffmpeg.jniinterface.FFmpegCallBack;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final int PERMISSION_REQUEST_CODE = 0x001;
-    private ScrollView sv;
     private final int CHOOSE_CODE = 0x000520;
     private final int RECORD_CODE = 0x000521;
     private final int CUT_CODE = 0x000522;
     private final int CHOOSE_CUT_CODE = 0x000523;
     private RadioGroup rg_aspiration;
-    private ProgressDialog mProgressDialog;
-    private LinearLayout ll_only_compress;
-    private LinearLayout ll_cut;
+    private Button btnFunc;
     private final String TAG = getClass().getSimpleName();
+    private int type = 0;
+    private String[] funcs = {"开始录制", "开始压缩", "开始剪切"};
     private static final String[] permissionManifest = {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
@@ -72,30 +66,25 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_recorder:
-                        sv.setVisibility(View.VISIBLE);
-                        ll_only_compress.setVisibility(View.GONE);
-                        ll_cut.setVisibility(View.GONE);
+                        type = 0;
                         break;
                     case R.id.rb_local:
-                        sv.setVisibility(View.GONE);
-                        ll_only_compress.setVisibility(View.VISIBLE);
-                        ll_cut.setVisibility(View.GONE);
+                        type = 1;
                         break;
                     case R.id.rb_cut:
-                        ll_cut.setVisibility(View.VISIBLE);
-                        ll_only_compress.setVisibility(View.GONE);
-                        sv.setVisibility(View.GONE);
+                        type = 2;
                         break;
                 }
+                btnFunc.setText(funcs[type]);
             }
         });
+
     }
 
     private void initView() {
         rg_aspiration = (RadioGroup) findViewById(R.id.rg_aspiration);
-        sv = (ScrollView) findViewById(R.id.sv);
-        ll_only_compress = (LinearLayout) findViewById(R.id.ll_only_compress);
-        ll_cut = (LinearLayout) findViewById(R.id.ll_cut);
+        btnFunc = findViewById(R.id.bt_start);
+        btnFunc.setOnClickListener(this);
         notifyFileSystemChanged(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/");
     }
 
@@ -129,17 +118,16 @@ public class MainActivity extends AppCompatActivity {
      * @param v
      */
     public void choose(View v) {
-
         Intent it = new Intent(Intent.ACTION_GET_CONTENT,
                 android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
 
         it.setDataAndType(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "video/*");
         startActivityForResult(it, CHOOSE_CODE);
-
     }
 
     /**
      * 视频剪切
+     *
      * @param v
      */
     public void cut(View v) {
@@ -154,14 +142,15 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 录像
+     *
      * @param c
      */
     public void recorder(View c) {
         FFmpeg fFmpeg = new FFmpeg.Builder()
-                                  .bind(this)
-                                  .setRequestCode(RECORD_CODE)
-                                  .setMaxRecordTime(60000)
-                                  .build();
+                .bind(this)
+                .setRequestCode(RECORD_CODE)
+                .setMaxRecordTime(60000)
+                .build();
         fFmpeg.recordr();
     }
 
@@ -172,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < permissions.length; i++) {
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                     if (Manifest.permission.CAMERA.equals(permissions[i])) {
-                       // setSupportCameraSize();
+                        // setSupportCameraSize();
                     } else if (Manifest.permission.RECORD_AUDIO.equals(permissions[i])) {
 
                     }
@@ -183,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (requestCode == CHOOSE_CODE) {
                 if (data != null && data.getData() != null) {
                     Uri uri = data.getData();
@@ -195,16 +184,14 @@ public class MainActivity extends AppCompatActivity {
                 if (data != null) {
                     Log.i(TAG, data.getStringExtra(Constants.RESULT));
                 }
-            }
-            else if (requestCode == CHOOSE_CUT_CODE) {
+            } else if (requestCode == CHOOSE_CUT_CODE) {
                 if (data != null && data.getData() != null) {
                     Uri uri = data.getData();
                     String path = UriUtils.getPath(this, uri);
                     cut(path);
                     Log.i(TAG, path);
                 }
-            }
-            else if (requestCode == CUT_CODE) {
+            } else if (requestCode == CUT_CODE) {
                 if (data != null) {
                     Log.i(TAG, data.getStringExtra(Constants.RESULT));
                 }
@@ -215,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 视频压缩
+     *
      * @param path
      */
     private void compress(String path) {
@@ -243,8 +231,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 视频剪切
      */
-    private void cut(String path){
-        FFmpeg fFmpeg = new FFmpeg.Builder().bind(this).setRequestCode(CUT_CODE).setMaxDuration(10*1000).setInputPath(path).build();
+    private void cut(String path) {
+        FFmpeg fFmpeg = new FFmpeg.Builder().bind(this).setRequestCode(CUT_CODE).setMaxDuration(10 * 1000).setInputPath(path).build();
         fFmpeg.cut();
     }
 
@@ -284,5 +272,21 @@ public class MainActivity extends AppCompatActivity {
         }
         // 初始化拍摄
         JianXiCamera.initialize(false, null);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (type) {
+            case 0:
+                recorder(v);
+                break;
+            case 1:
+                choose(v);
+                break;
+            case 2:
+                cut(v);
+                break;
+            default:
+        }
     }
 }
