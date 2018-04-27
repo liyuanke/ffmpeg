@@ -30,31 +30,32 @@
     }
 ```
 
-####视频压缩<br>
+####视频压缩
 ```
     private void compress(String path) {
         FFmpeg fFmpeg = new FFmpeg.Builder()
                                   .setInputPath(path)
                                   .build();
         fFmpeg.compress(new FFmpegCallBack() {//callback回调在主线程运行
-        @Override
-        public void onSuccess(String outPath) {
+            @Override
+                public void onSuccess(String outPath) {
                   Log.i(TAG, outPath);
-        }
+                }
 
-        @Override
-        public void onError(String error) {
+                @Override
+                public void onError(String error) {
 
-        }
+                }
 
-        @Override
-        public void onFinish() {
-            ViewUtils.dismissProgress();
-        }
-    }); }
+                @Override
+                public void onFinish() {
+                    
+                }
+    });
+   }
 ```
- ####视频压缩也可以单独配置LocalMediaConfig
- ```
+####视频压缩也可以单独配置LocalMediaConfig
+```
     LocalMediaConfig mediaConfig = new LocalMediaConfig.Buidler()
                      .setVideoPath(inputPath)
                      .captureThumbnailsTime(1)
@@ -75,8 +76,9 @@
                           .setMaxRecordTime(60_000)//录制最长时间
                           .build();
     fFmpeg.recordr();
-    ```
+```
 ####同样也可以自己配置MediaRecorderConfig
+```
     MediaRecorderConfig recorderConfig = new MediaRecorderConfig.Buidler()
                     .smallVideoWidth(320)
                     .smallVideoHeight(480)
@@ -85,7 +87,7 @@
                     .videoBitrate(580000)
                     .captureThumbnailsTime(1)
                     .build();
-
+```
 ####视频剪切
 ```
     private void cut(String path){
@@ -116,6 +118,6 @@
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    ```
+```
 
 Edit By [MaHua](http://mahua.jser.me)
