@@ -1,5 +1,7 @@
-##采用ffmpeg实现视频的压缩、剪切，并提供视频录制功能
-![image](http://lc-of1hyao5.cn-n1.lcfile.com/02c7de37a5e07fa208c0.png)
+##采用ffmpeg实现视频的压缩、剪切，并提供视频录制功能<br>
+
+![image](http://lc-of1hyao5.cn-n1.lcfile.com/02c7de37a5e07fa208c0.png)<br>
+
 ####配置权限
 ```
     <uses-permission android:name="android.permission.CAMERA" />
@@ -68,9 +70,10 @@
                     .setMediaConfig(mediaConfig)
                     .build();
 ```
-####视频录制
+####视频录制<br>
 
-![image](http://lc-of1hyao5.cn-n1.lcfile.com/b2e50e0cb24fc9758f29.png)
+![image](http://lc-of1hyao5.cn-n1.lcfile.com/b2e50e0cb24fc9758f29.png)<br>
+
 ```
     FFmpeg fFmpeg = new FFmpeg.Builder()
                           .bind(this)
@@ -90,8 +93,10 @@
                     .captureThumbnailsTime(1)
                     .build();
 ```
-####视频剪切
-![image](http://lc-of1hyao5.cn-n1.lcfile.com/5b9e950ba0134b248ef2.png)
+####视频剪切<br>
+
+![image](http://lc-of1hyao5.cn-n1.lcfile.com/5b9e950ba0134b248ef2.png)<br>
+
 ```
     private void cut(String path){
         FFmpeg fFmpeg = new FFmpeg.Builder()
