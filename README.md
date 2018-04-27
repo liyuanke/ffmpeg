@@ -72,7 +72,7 @@
 ```
 ####视频录制<br>
 
-![image](http://lc-of1hyao5.cn-n1.lcfile.com/b2e50e0cb24fc9758f29.png)<br>
+![image](http://lc-of1hyao5.cn-n1.lcfile.com/5b9e950ba0134b248ef2.png)<br>
 
 ```
     FFmpeg fFmpeg = new FFmpeg.Builder()
@@ -95,7 +95,7 @@
 ```
 ####视频剪切<br>
 
-![image](http://lc-of1hyao5.cn-n1.lcfile.com/5b9e950ba0134b248ef2.png)<br>
+![image](http://lc-of1hyao5.cn-n1.lcfile.com/b2e50e0cb24fc9758f29.png)<br>
 
 ```
     private void cut(String path){
