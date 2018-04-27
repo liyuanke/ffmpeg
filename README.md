@@ -1,19 +1,16 @@
 #ffmpeg
 
-采用ffmpeg实现视频的压缩、剪切，并提供视频录制功能
+#采用ffmpeg实现视频的压缩、剪切，并提供视频录制功能
 
-配置权限
+#配置权限
+
 <uses-permission android:name="android.permission.CAMERA" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
-
- /**
- * 初始化
- */
+ #初始化
  public static void initSmallVideo() {
         // 设置拍摄视频缓存路径
         File dcim = Environment
