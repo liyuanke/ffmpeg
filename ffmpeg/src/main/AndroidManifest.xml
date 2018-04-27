@@ -15,16 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:screenOrientation="portrait"
             android:name=".MediaRecorderActivity"
             android:theme="@style/AppNoBarTheme" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".VideoPlayerActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".SendSmallVideoActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".videocut.VideoEditActivity"
             android:theme="@style/AppNoBarTheme" />
     </application>

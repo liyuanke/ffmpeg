@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.cb.ffmpeg.common.Constants;
+import com.cb.ffmpeg.common.DeviceUtils;
 import com.cb.ffmpeg.common.EditParam;
 import com.cb.ffmpeg.common.LocalMediaCompress;
-import com.cb.ffmpeg.common.RecordParam;
 import com.cb.ffmpeg.jniinterface.FFmpegCallBack;
 import com.cb.ffmpeg.model.AutoVBRMode;
 import com.cb.ffmpeg.model.BaseMediaBitrateConfig;
@@ -57,13 +57,13 @@ public class FFmpeg {
         private LocalMediaConfig mediaConfig;
         private MediaRecorderConfig recorderConfig;
         private int requestCode;
-        private long maxDuration = 60*1000L;//视频最长播放时间毫秒
+        private long maxDuration = 60 * 1000L;//视频最长播放时间毫秒
         /**
          * 录制最长时间 毫秒
          */
         private int maxRecordTime = 60 * 1000;
-        private int width=640;//视频宽度
-        private int height=960;//视频高度
+        private int width = 640;//视频宽度
+        private int height = 960;//视频高度
         private int maxFrameRate = 20;//最大帧率
         private int videoBitrate = 580000;//视频比特率
 
@@ -162,6 +162,9 @@ public class FFmpeg {
      * 视频剪切
      */
     public void cut() {
+        if (null == activity) {
+            throw new NullPointerException("acitivty 必须 bind");
+        }
         EditParam param = new EditParam(maxDuration, inputPath);
         Intent intent = new Intent(activity, VideoEditActivity.class);
         intent.putExtra(Constants.PARAM, param);
@@ -172,6 +175,9 @@ public class FFmpeg {
      * 视频录制
      */
     public void recordr() {
+        if (null == activity) {
+            throw new NullPointerException("acitivty 必须 bind");
+        }
         if (this.recorderConfig == null) {
             this.recorderConfig = new MediaRecorderConfig.Buidler()
                     .smallVideoWidth(Integer.valueOf(width))
@@ -182,7 +188,7 @@ public class FFmpeg {
                     .captureThumbnailsTime(1)
                     .build();
         }
-        activity.startActivityForResult(new Intent(activity, MediaRecorderActivity.class).putExtra(MEDIA_RECORDER_CONFIG_KEY, this.recorderConfig),requestCode);
+        activity.startActivityForResult(new Intent(activity, MediaRecorderActivity.class).putExtra(MEDIA_RECORDER_CONFIG_KEY, this.recorderConfig), requestCode);
     }
 
 }

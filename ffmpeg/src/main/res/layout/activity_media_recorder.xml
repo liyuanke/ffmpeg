@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_381902">
+    android:background="@color/transparent">
 
+    <SurfaceView
+        android:id="@+id/record_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
     <RelativeLayout
         android:id="@+id/title_layout"
         android:layout_width="match_parent"
         android:layout_height="49dip"
         android:alpha="0.85"
-        android:background="@color/transparent2"
+        android:background="@color/transparent"
         android:gravity="center_vertical">
 
         <ImageView
@@ -63,28 +67,17 @@
         android:id="@+id/record_progress"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:layout_below="@+id/title_layout" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/record_progress">
-
-        <SurfaceView
-            android:id="@+id/record_preview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
-
+        android:layout_below="@+id/title_layout"
+        android:layout_marginTop="49dp" />
     <!-- camera_bottom_bg -->
     <RelativeLayout
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/record_progress"
-        android:layout_marginTop="300dip"
-        android:background="@color/color_381902"
-        >
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/transparent"
+        android:padding="50dp">
+
         <CheckedTextView
             android:id="@+id/record_delete"
             android:layout_width="wrap_content"
@@ -106,6 +99,4 @@
             android:textColor="@color/camera_progress_three"
             android:textSize="16sp" />
     </RelativeLayout>
-
-
-</RelativeLayout>
+</FrameLayout>

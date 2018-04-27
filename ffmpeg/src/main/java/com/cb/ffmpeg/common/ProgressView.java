@@ -75,7 +75,7 @@ public class ProgressView extends View {
 
         mVLineWidth = DeviceUtils.dipToPX(getContext(), 1);
 
-        setBackgroundColor(getResources().getColor(R.color.camera_bg));
+        setBackgroundColor(getResources().getColor(R.color.transparent));
         mProgressPaint.setColor(0xFF45C01A);
         mProgressPaint.setStyle(Paint.Style.FILL);
 

@@ -22,6 +22,7 @@ import com.cb.ffmpeg.model.MediaObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -111,6 +112,9 @@ public abstract class MediaRecorderBase implements Callback, PreviewCallback, IM
     public static int MIN_FRAME_RATE = 8;
 
     public static int CAPTURE_THUMBNAILS_TIME = 1;
+
+    public static int SCREEN_WIDTH;
+    public static int SCREEN_HEIGHT;
 
 
     public BaseMediaBitrateConfig compressConfig;
@@ -529,28 +533,33 @@ public abstract class MediaRecorderBase implements Callback, PreviewCallback, IM
         // mParameters.setPreviewFpsRange(15 * 1000, 20 * 1000);
 //		TODO 设置浏览尺寸
         boolean findWidth = false;
+        List<Size> sizes = new ArrayList<>();
         for (int i = mSupportedPreviewSizes.size() - 1; i >= 0; i--) {
             Size size = mSupportedPreviewSizes.get(i);
-            if (SMALL_VIDEO_HEIGHT > 0) {
-                if (size.height == SMALL_VIDEO_HEIGHT) {
-                    mSupportedPreviewWidth = size.width;
-                    findWidth = true;
-                    break;
-                }
-            } else {
-                SMALL_VIDEO_HEIGHT = size.height;
-                mSupportedPreviewWidth = size.width;
-                findWidth = true;
-                break;
+            if (size.width * SCREEN_WIDTH == SCREEN_HEIGHT * size.height) {
+                sizes.add(size);
             }
         }
+        int minGap = 0xFFFFFF;//最小差值
+        int tempHeight = 0;
+        for (Size size : sizes) {
+            if (Math.abs(size.width - SMALL_VIDEO_HEIGHT) < minGap) {
+                mSupportedPreviewWidth = size.width;
+                tempHeight = size.height;
+                minGap = Math.abs(size.width - SMALL_VIDEO_HEIGHT);
+                findWidth = true;
+            }
+        }
+
         if (!findWidth) {
             Log.e(getClass().getSimpleName(), "传入高度不支持或未找到对应宽度,请按照要求重新设置，否则会出现一些严重问题");
             mSupportedPreviewWidth = 640;
             SMALL_VIDEO_WIDTH = 360;
             SMALL_VIDEO_HEIGHT = 480;
         }
-        mParameters.setPreviewSize(mSupportedPreviewWidth, SMALL_VIDEO_HEIGHT);
+        SMALL_VIDEO_WIDTH= mSupportedPreviewWidth;
+        SMALL_VIDEO_HEIGHT = tempHeight;
+        mParameters.setPreviewSize(SMALL_VIDEO_WIDTH, SMALL_VIDEO_HEIGHT);
 
         // 设置输出视频流尺寸，采样率
         mParameters.setPreviewFormat(ImageFormat.YV12);

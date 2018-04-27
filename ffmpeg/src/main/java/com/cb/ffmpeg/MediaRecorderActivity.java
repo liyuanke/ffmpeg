@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
@@ -29,7 +28,7 @@ import com.cb.ffmpeg.common.JianXiCamera;
 import com.cb.ffmpeg.common.MediaRecorderBase;
 import com.cb.ffmpeg.common.MediaRecorderNative;
 import com.cb.ffmpeg.common.ProgressView;
-import com.cb.ffmpeg.common.StringUtils;
+import com.cb.ffmpeg.common.ViewUtils;
 import com.cb.ffmpeg.model.MediaObject;
 import com.cb.ffmpeg.model.MediaRecorderConfig;
 
@@ -149,6 +148,8 @@ public class MediaRecorderActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置全屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 防止锁屏
         initData();
         loadViews();
@@ -167,6 +168,8 @@ public class MediaRecorderActivity extends Activity implements
         MediaRecorderBase.SMALL_VIDEO_WIDTH = mediaRecorderConfig.getSmallVideoWidth();
         MediaRecorderBase.mVideoBitrate = mediaRecorderConfig.getVideoBitrate();
         MediaRecorderBase.CAPTURE_THUMBNAILS_TIME = mediaRecorderConfig.getCaptureThumbnailsTime();
+        MediaRecorderBase.SCREEN_WIDTH = DeviceUtils.getScreenWidth(this);
+        MediaRecorderBase.SCREEN_HEIGHT = DeviceUtils.getScreenHeight(this);
         GO_HOME = mediaRecorderConfig.isGO_HOME();
     }
 
@@ -188,14 +191,12 @@ public class MediaRecorderActivity extends Activity implements
         // ~~~ 绑定事件
         /*if (DeviceUtils.hasICS())
             mSurfaceView.setOnTouchListener(mOnSurfaveViewTouchListener);*/
-
         mTitleNext.setOnClickListener(this);
         findViewById(R.id.title_back).setOnClickListener(this);
         mRecordDelete.setOnClickListener(this);
         mRecordController.setOnTouchListener(mOnVideoControllerTouchListener);
 
         // ~~~ 设置数据
-
         // 是否支持前置摄像头
         if (MediaRecorderBase.isSupportFrontCamera()) {
             mCameraSwitch.setOnClickListener(this);
@@ -208,7 +209,6 @@ public class MediaRecorderActivity extends Activity implements
         } else {
             mRecordLed.setVisibility(View.GONE);
         }
-
         mProgressView.setMaxDuration(RECORD_TIME_MAX);
         mProgressView.setMinTime(0);
     }
@@ -221,7 +221,6 @@ public class MediaRecorderActivity extends Activity implements
         ((RelativeLayout.LayoutParams) mBottomLayout.getLayoutParams()).topMargin = (int) (w / (MediaRecorderBase.SMALL_VIDEO_HEIGHT / (MediaRecorderBase.SMALL_VIDEO_WIDTH * 1.0f)));
         int width = w;
         int height = (int) (w * ((MediaRecorderBase.mSupportedPreviewWidth * 1.0f) / MediaRecorderBase.SMALL_VIDEO_HEIGHT));
-        //
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mSurfaceView
                 .getLayoutParams();
         lp.width = width;
@@ -234,7 +233,6 @@ public class MediaRecorderActivity extends Activity implements
      */
     private void initMediaRecorder() {
         mMediaRecorder = new MediaRecorderNative();
-
         mMediaRecorder.setOnErrorListener(this);
         mMediaRecorder.setOnEncodeListener(this);
         mMediaRecorder.setOnPreparedListener(this);
@@ -269,13 +267,10 @@ public class MediaRecorderActivity extends Activity implements
                     if (mMediaObject.getDuration() >= RECORD_TIME_MAX) {
                         return true;
                     }
-
                     // 取消回删
                     if (cancelDelete())
                         return true;
-
                     startRecord();
-
                     break;
 
                 case MotionEvent.ACTION_UP:
@@ -558,7 +553,7 @@ public class MediaRecorderActivity extends Activity implements
 
     @Override
     public void onEncodeStart() {
-        showProgress("", getString(R.string.record_camera_progress_message));
+        ViewUtils.showProgress(this, "", getString(R.string.record_camera_progress_message));
     }
 
     @Override
@@ -570,7 +565,7 @@ public class MediaRecorderActivity extends Activity implements
      */
     @Override
     public void onEncodeComplete() {
-        hideProgress();
+        ViewUtils.dismissProgress();
         Intent intent = new Intent();
         intent.putExtra(MediaRecorderActivity.OUTPUT_DIRECTORY, mMediaObject.getOutputDirectory());
         intent.putExtra(MediaRecorderActivity.VIDEO_URI, mMediaObject.getOutputTempTranscodingVideoPath());
@@ -586,7 +581,7 @@ public class MediaRecorderActivity extends Activity implements
      */
     @Override
     public void onEncodeError() {
-        hideProgress();
+        ViewUtils.dismissProgress();
         Toast.makeText(this, R.string.record_video_transcoding_faild,
                 Toast.LENGTH_SHORT).show();
         finish();
@@ -613,43 +608,13 @@ public class MediaRecorderActivity extends Activity implements
 
     protected ProgressDialog mProgressDialog;
 
-    public ProgressDialog showProgress(String title, String message) {
-        return showProgress(title, message, -1);
-    }
-
-    public ProgressDialog showProgress(String title, String message, int theme) {
-        if (mProgressDialog == null) {
-            if (theme > 0)
-                mProgressDialog = new ProgressDialog(this, theme);
-            else
-                mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            mProgressDialog.setCanceledOnTouchOutside(false);// 不能取消
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setIndeterminate(true);// 设置进度条是否不明确
-        }
-
-        if (!StringUtils.isEmpty(title))
-            mProgressDialog.setTitle(title);
-        mProgressDialog.setMessage(message);
-        mProgressDialog.show();
-        return mProgressDialog;
-    }
-
-    public void hideProgress() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
-    }
-
     @Override
     protected void onStop() {
         super.onStop();
         if (mMediaRecorder instanceof MediaRecorderNative) {
             ((MediaRecorderNative) mMediaRecorder).activityStop();
         }
-        hideProgress();
+        ViewUtils.dismissProgress();
         mProgressDialog = null;
     }
 }

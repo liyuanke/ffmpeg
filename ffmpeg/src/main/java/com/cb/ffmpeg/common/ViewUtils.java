@@ -13,8 +13,12 @@ import android.widget.Toast;
 public class ViewUtils {
     private static ProgressDialog mProgressDialog;
 
+    public static void showProgress(Activity activity, String title, String message) {
+        showProgress(activity, title, message, 0);
+    }
+
     public static void showProgress(Activity activity, String title, String message, int theme) {
-        if(!activity.isFinishing()) {
+        if (!activity.isFinishing()) {
             if (mProgressDialog == null) {
                 if (theme > 0) {
                     mProgressDialog = new ProgressDialog(activity, theme);
