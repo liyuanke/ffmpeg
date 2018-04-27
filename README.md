@@ -1,8 +1,8 @@
 ##采用ffmpeg实现视频的压缩、剪切，并提供视频录制功能<br>
 
-![image](http://lc-of1hyao5.cn-n1.lcfile.com/02c7de37a5e07fa208c0.png)
-![image](http://lc-of1hyao5.cn-n1.lcfile.com/b2e50e0cb24fc9758f29.png)
-![image](http://lc-of1hyao5.cn-n1.lcfile.com/5b9e950ba0134b248ef2.png)<br>
+![image](http://lc-of1hyao5.cn-n1.lcfile.com/df5920605cf229721ee3.png)
+![image](http://lc-of1hyao5.cn-n1.lcfile.com/582f2fa1d0a5ba942328.png)
+![image](http://lc-of1hyao5.cn-n1.lcfile.com/55ab82bd2778fd85c423.png)<br>
 
 ####配置权限
 ```
