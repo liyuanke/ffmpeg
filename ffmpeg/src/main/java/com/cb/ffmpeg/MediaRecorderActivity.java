@@ -606,8 +606,6 @@ public class MediaRecorderActivity extends Activity implements
         finish();
     }
 
-    protected ProgressDialog mProgressDialog;
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -615,6 +613,5 @@ public class MediaRecorderActivity extends Activity implements
             ((MediaRecorderNative) mMediaRecorder).activityStop();
         }
         ViewUtils.dismissProgress();
-        mProgressDialog = null;
     }
 }

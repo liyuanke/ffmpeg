@@ -61,7 +61,7 @@ public class FFmpeg {
         /**
          * 录制最长时间 毫秒
          */
-        private int maxRecordTime = 60 * 1000;
+        private int maxRecordTime = 10 * 1000;
         private int width = 640;//视频宽度
         private int height = 960;//视频高度
         private int maxFrameRate = 20;//最大帧率

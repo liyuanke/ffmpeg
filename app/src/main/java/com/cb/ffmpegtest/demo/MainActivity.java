@@ -1,7 +1,6 @@
 package com.cb.ffmpegtest.demo;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -17,9 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 
 import com.cb.ffmpeg.FFmpeg;
 import com.cb.ffmpeg.common.Constants;
@@ -101,11 +98,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent = new Intent(Intent.ACTION_MEDIA_MOUNTED);
                 intent.setClassName("com.android.providers.media", "com.android.providers.media.MediaScannerReceiver");
                 intent.setData(Uri.fromFile(Environment.getExternalStorageDirectory()));
-                Log.v("HongLi", "directory changed, send broadcast:" + intent.toString());
+                Log.v("TAG", "directory changed, send broadcast:" + intent.toString());
             } else {
                 intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 intent.setData(Uri.fromFile(new File(path)));
-                Log.v("HongLi", "file changed, send broadcast:" + intent.toString());
+                Log.v("TAG", "file changed, send broadcast:" + intent.toString());
             }
             sendBroadcast(intent);
         }
@@ -149,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FFmpeg fFmpeg = new FFmpeg.Builder()
                 .bind(this)
                 .setRequestCode(RECORD_CODE)
-                .setMaxRecordTime(60000)
+                .setMaxRecordTime(10_000)
                 .build();
         fFmpeg.recordr();
     }
@@ -182,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             } else if (requestCode == RECORD_CODE) {
                 if (data != null) {
+                    ViewUtils.toast(MainActivity.this, "录制成功,路径:" + data.getStringExtra(Constants.RESULT));
                     Log.i(TAG, data.getStringExtra(Constants.RESULT));
                 }
             } else if (requestCode == CHOOSE_CUT_CODE) {
@@ -194,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (requestCode == CUT_CODE) {
                 if (data != null) {
                     Log.i(TAG, data.getStringExtra(Constants.RESULT));
+                    ViewUtils.toast(MainActivity.this, "剪切成功,路径:" +data.getStringExtra(Constants.RESULT));
                 }
             }
         }
@@ -211,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fFmpeg.compress(new FFmpegCallBack() {
             @Override
             public void onSuccess(String outPath) {
+                ViewUtils.toast(MainActivity.this, "压缩成功,路径:" + outPath);
                 Log.i(TAG, outPath);
             }
 
