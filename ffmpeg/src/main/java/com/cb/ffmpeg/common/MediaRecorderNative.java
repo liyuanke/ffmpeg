@@ -120,8 +120,10 @@ public class MediaRecorderNative extends MediaRecorderBase implements MediaRecor
 
     @Override
     public void allRecordEnd() {
-
-        final boolean captureFlag = FFMpegUtils.captureThumbnails(mMediaObject.getOutputTempTranscodingVideoPath(), mMediaObject.getOutputVideoThumbPath(),  String.valueOf(CAPTURE_THUMBNAILS_TIME));
+        /**
+         * 去掉缩略图
+         */
+        final boolean captureFlag = true;//FFMpegUtils.captureThumbnails(mMediaObject.getOutputTempTranscodingVideoPath(), mMediaObject.getOutputVideoThumbPath(),  String.valueOf(CAPTURE_THUMBNAILS_TIME));
 
         if(mOnEncodeListener!=null){
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {

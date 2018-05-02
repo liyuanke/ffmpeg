@@ -105,7 +105,7 @@ public abstract class MediaRecorderBase implements Callback, PreviewCallback, IM
     /**
      * 最大帧率
      */
-    public static int MAX_FRAME_RATE = 20;
+    public static int MAX_FRAME_RATE = 30;
     /**
      * 最小帧率
      */

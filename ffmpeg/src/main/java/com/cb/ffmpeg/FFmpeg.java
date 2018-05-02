@@ -64,7 +64,7 @@ public class FFmpeg {
         private int maxRecordTime = 10 * 1000;
         private int width = 640;//视频宽度
         private int height = 960;//视频高度
-        private int maxFrameRate = 20;//最大帧率
+        private int maxFrameRate = 30;//最大帧率
         private int videoBitrate = 580000;//视频比特率
 
         public Builder setWidth(int width) {

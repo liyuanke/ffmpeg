@@ -2,9 +2,9 @@ package com.cb.ffmpeg;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +25,7 @@ import com.cb.ffmpeg.common.Constants;
 import com.cb.ffmpeg.common.DeviceUtils;
 import com.cb.ffmpeg.common.FileUtils;
 import com.cb.ffmpeg.common.JianXiCamera;
+import com.cb.ffmpeg.common.Log;
 import com.cb.ffmpeg.common.MediaRecorderBase;
 import com.cb.ffmpeg.common.MediaRecorderNative;
 import com.cb.ffmpeg.common.ProgressView;
@@ -275,7 +276,7 @@ public class MediaRecorderActivity extends Activity implements
 
                 case MotionEvent.ACTION_UP:
                     stopRecord();
-                    mTitleNext.performClick();
+                    //mTitleNext.performClick();
                     // 暂停
 /*                    if (mPressedStatus) {
 
@@ -387,19 +388,25 @@ public class MediaRecorderActivity extends Activity implements
      * 停止录制
      */
     private void stopRecord() {
-        mPressedStatus = false;
-        mRecordController.animate().scaleX(1).scaleY(1).setDuration(500).start();
+        if (mPressedStatus) {
+            if (mMediaRecorder != null) {
+                mMediaRecorder.release();
+            }
+            android.util.Log.i(getClass().getSimpleName(),"stopRecord");
+            mPressedStatus = false;
+            mRecordController.animate().scaleX(1).scaleY(1).setDuration(500).start();
 
-        if (mMediaRecorder != null) {
-            mMediaRecorder.stopRecord();
+            if (mMediaRecorder != null) {
+                mMediaRecorder.stopRecord();
+            }
+
+            mRecordDelete.setVisibility(View.VISIBLE);
+            mCameraSwitch.setEnabled(true);
+            mRecordLed.setEnabled(true);
+
+            mHandler.removeMessages(HANDLE_STOP_RECORD);
+            checkStatus();
         }
-
-        mRecordDelete.setVisibility(View.VISIBLE);
-        mCameraSwitch.setEnabled(true);
-        mRecordLed.setEnabled(true);
-
-        mHandler.removeMessages(HANDLE_STOP_RECORD);
-        checkStatus();
     }
 
     @Override
@@ -535,7 +542,7 @@ public class MediaRecorderActivity extends Activity implements
                     if (mMediaRecorder != null && !isFinishing()) {
                         if (mMediaObject != null && mMediaObject.getMedaParts() != null && mMediaObject.getDuration() >= RECORD_TIME_MAX) {
                             stopRecord();
-                            mTitleNext.performClick();
+                            //mTitleNext.performClick();
                             return;
                         }
                         if (mProgressView != null)
